@@ -6,7 +6,6 @@ function create() {
     return (
         <MainContainer>
             {/* コンテンツ */}
-            <NavBar />
         </MainContainer>
     )
 }

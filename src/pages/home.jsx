@@ -6,7 +6,6 @@ function home() {
     return (
         <MainContainer>
             {/* コンテンツ */}
-            <NavBar />
         </MainContainer>
     )
 }

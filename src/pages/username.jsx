@@ -6,7 +6,6 @@ function username() {
     return (
         <MainContainer>
             {/* コンテンツ */}
-            <NavBar />
         </MainContainer>
     )
 }
