@@ -1,6 +1,5 @@
-import NavBar from '@/pages/components/navbar'
 import React from 'react'
-import MainContainer from '@/pages/components/mainContainer'
+import MainContainer from '@/components/mainContainer';
 
 function home() {
     return (
