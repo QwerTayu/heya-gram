@@ -1,4 +1,4 @@
-import NavBar from '@/pages/components/navbar'
+import NavBar from '@/components/navbar'
 import React from 'react'
 
 function MainContainer({ children }) {

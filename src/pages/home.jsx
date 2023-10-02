@@ -1,8 +1,7 @@
-import NavBar from '@/pages/components/navbar'
 import React, { useEffect } from 'react'
-import MainContainer from '@/pages/components/mainContainer'
 import { collection, getDocs, onSnapshot } from 'firebase/firestore';
-import { db } from '@/pages/lib/firebase';
+import { db } from '@/lib/firebase';
+import MainContainer from '@/components/mainContainer';
 
 function home() {
     const [ posts, setPosts ] = React.useState([]);

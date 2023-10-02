@@ -1,6 +1,5 @@
-import NavBar from '@/pages/components/navbar'
+import MainContainer from '@/components/mainContainer'
 import React from 'react'
-import MainContainer from '@/pages/components/mainContainer'
 
 function create() {
     return (
