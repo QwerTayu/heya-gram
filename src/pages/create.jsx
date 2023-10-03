@@ -1,10 +1,34 @@
+import FileUploader from '@/components/fileUploader';
 import MainContainer from '@/components/mainContainer'
-import React from 'react'
+import { useFirestore } from '@/hooks/useFirestore';
+import { useStorage } from '@/hooks/useStorage';
+import { router } from 'next/router'
+import React, { useState } from 'react'
 
 function create() {
+    const [ body, setBody ] = useState('');
+    const { createPost } = useFirestore();
+    const [ postId, setPostId ] = useState('postId');
+    const [ isFileUploaded, setIsFileUploaded ] = useState(false);
+
+    const handleInputChange = (value) => {
+        setBody(value);
+    };
+
+    const sendPost = () => {
+        createPost("userId", body, null, "URL"); // userId, pBody, pCommentTo, pImageURL
+        console.log('投稿しました');
+        router.push('/home');
+    };
+
     return (
         <MainContainer>
-            {/* コンテンツ */}
+            <div className='flex justify-between'>
+                <button type='button' onClick={() => router.back()} className='p-2'>x</button>
+                <button type='button' onClick={() => sendPost()} className='p-2'>投稿</button>
+            </div>
+            <FileUploader postId={postId} setIsFileUploaded={setIsFileUploaded}/>
+            <input type="text" placeholder="掃除をしよう！" value={body} onChange={(e) => handleInputChange(e.target.value)} />
         </MainContainer>
     )
 }
