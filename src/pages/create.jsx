@@ -5,6 +5,7 @@ import { useStorage } from '@/hooks/useStorage';
 import { router } from 'next/router'
 import Randomstring from 'randomstring'
 import React, { useEffect, useState } from 'react'
+import { PiArrowLeftBold, PiPaperPlaneTiltBold } from 'react-icons/pi';
 
 function create() {
     const [ body, setBody ] = useState('');
@@ -33,11 +34,17 @@ function create() {
     return (
         <MainContainer>
             <div className='flex justify-between'>
-                <button type='button' onClick={() => router.back()} className='p-2'>x</button>
+                <button type='button' onClick={() => router.back()} className='p-2'>
+                    <PiArrowLeftBold size={24} />
+                </button>
                 {isFileUploaded ? (
-                    <button type='button' onClick={() => sendPost()} className='p-2'>投稿</button>
+                    <button type='button' onClick={() => sendPost()} className='p-2'>
+                        <PiPaperPlaneTiltBold size={24} />
+                    </button>
                 ) : (
-                    <button type='button' className='p-2 cursor-not-allowed' disabled>投稿</button>
+                    <button type='button' className='p-2 cursor-not-allowed' disabled>
+                        <PiPaperPlaneTiltBold size={24} />
+                    </button>
                 )}
             </div>
             <FileUploader postId={postId} setIsFileUploaded={setIsFileUploaded}/>
