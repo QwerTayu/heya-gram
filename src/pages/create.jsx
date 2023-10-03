@@ -3,7 +3,8 @@ import MainContainer from '@/components/mainContainer'
 import { useFirestore } from '@/hooks/useFirestore';
 import { useStorage } from '@/hooks/useStorage';
 import { router } from 'next/router'
-import React, { useState } from 'react'
+import Randomstring from 'randomstring'
+import React, { useEffect, useState } from 'react'
 
 function create() {
     const [ body, setBody ] = useState('');
@@ -11,6 +12,12 @@ function create() {
     const { showImage } = useStorage();
     const [ postId, setPostId ] = useState('postId');
     const [ isFileUploaded, setIsFileUploaded ] = useState(false);
+
+    const randomSlug = Randomstring.generate(16);
+
+    useEffect(() => {
+        setPostId(randomSlug);
+    }, []);
 
     const handleInputChange = (value) => {
         setBody(value);
