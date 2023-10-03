@@ -2,10 +2,10 @@ import { useStorage } from "@/hooks/useStorage";
 import React, { useEffect, useState } from "react";
 
 function FileUploader({ postId, setIsFileUploaded }) {
-    const { uploadImage } = useStorage();
+    const { uploadImage, showImage } = useStorage();
     const [ isUploading, setIsUploading ] = useState(false);
     const [ isUploaded, setIsUploaded ] = useState(false);
-    const [ imageURL, setImageURL ] = useState('https://firebasestorage.googleapis.com/v0/b/heya-gram.appspot.com/o/postImages%2FpostId.jpg?alt=media&token=c1d93791-af45-466d-8208-0df5008a70b7');
+    const [ imageURL, setImageURL ] = useState('');
 
     const onFileUploadToStorage = async (e) => {
         const file = e.target.files[0];
@@ -14,7 +14,13 @@ function FileUploader({ postId, setIsFileUploaded }) {
 
     useEffect(() => {
         setIsFileUploaded(isUploaded);
-        setImageURL(imageURL);
+        if (isUploaded) {
+            const fetchImageURL = async () => {
+                const url = await showImage(postId);
+                setImageURL(url);
+            };
+            fetchImageURL();
+        }
     }, [isUploaded]);
 
     useEffect(() => {
