@@ -2,8 +2,8 @@ import { db } from "@/lib/firebase";
 import { doc, setDoc, Timestamp } from "firebase/firestore";
 
 export const useFirestore = () => {
-    const createPost = async (userId, pBody, pCommentTo, pImageURL) => {
-        const pRef = doc(db, "posts", userId)
+    const createPost = async (postId, userId, pBody, pCommentTo, pImageURL) => {
+        const pRef = doc(db, "posts", postId)
         try{
             await setDoc(pRef, {
                 body: pBody,

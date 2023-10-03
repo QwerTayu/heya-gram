@@ -18,7 +18,7 @@ function create() {
 
     const sendPost = async () => {
         const imageURL = await showImage(postId);
-        createPost(postId, body, null, imageURL); // userId, pBody, pCommentTo, pImageURL
+        createPost(postId, "Taro", body, null, imageURL); // postId, userId, pBody, pCommentTo, pImageURL
         console.log('投稿しました');
         router.push('/home');
     };
