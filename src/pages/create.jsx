@@ -8,6 +8,7 @@ import React, { useState } from 'react'
 function create() {
     const [ body, setBody ] = useState('');
     const { createPost } = useFirestore();
+    const { showImage } = useStorage();
     const [ postId, setPostId ] = useState('postId');
     const [ isFileUploaded, setIsFileUploaded ] = useState(false);
 
@@ -15,8 +16,9 @@ function create() {
         setBody(value);
     };
 
-    const sendPost = () => {
-        createPost("userId", body, null, "URL"); // userId, pBody, pCommentTo, pImageURL
+    const sendPost = async () => {
+        const imageURL = await showImage(postId);
+        createPost(postId, body, null, imageURL); // userId, pBody, pCommentTo, pImageURL
         console.log('投稿しました');
         router.push('/home');
     };
