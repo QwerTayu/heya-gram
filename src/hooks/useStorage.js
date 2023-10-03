@@ -1,5 +1,5 @@
 import { storage } from "@/lib/firebase";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 export const useStorage = () => {
     const uploadImage = async (postId, file, setIsUploading, setIsUploaded) => {
@@ -30,5 +30,11 @@ export const useStorage = () => {
         console.log(url);
         return url;
     };
-    return { uploadImage, showImage };
+
+    const deleteImage = async (postId) => {
+        const iRef = ref(storage, "postImages/" + postId + ".jpg");
+        await deleteObject(iRef);
+    };
+
+    return { uploadImage, showImage, deleteImage };
 };

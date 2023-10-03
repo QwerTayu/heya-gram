@@ -10,7 +10,7 @@ import { PiArrowLeftBold, PiPaperPlaneTiltBold } from 'react-icons/pi';
 function create() {
     const [ body, setBody ] = useState('');
     const { createPost } = useFirestore();
-    const { showImage } = useStorage();
+    const { showImage, deleteImage } = useStorage();
     const [ postId, setPostId ] = useState('postId');
     const [ isFileUploaded, setIsFileUploaded ] = useState(false);
 
@@ -31,10 +31,15 @@ function create() {
         router.push('/home');
     };
 
+    const reversePost = () => {
+        deleteImage(postId);
+        router.back();
+    }
+
     return (
         <MainContainer>
             <div className='flex justify-between'>
-                <button type='button' onClick={() => router.back()} className='p-2'>
+                <button type='button' onClick={() => reversePost()} className='p-2'>
                     <PiArrowLeftBold size={24} />
                 </button>
                 {isFileUploaded && body ? (
