@@ -25,7 +25,11 @@ function create() {
         <MainContainer>
             <div className='flex justify-between'>
                 <button type='button' onClick={() => router.back()} className='p-2'>x</button>
-                <button type='button' onClick={() => sendPost()} className='p-2'>投稿</button>
+                {isFileUploaded ? (
+                    <button type='button' onClick={() => sendPost()} className='p-2'>投稿</button>
+                ) : (
+                    <button type='button' className='p-2 cursor-not-allowed' disabled>投稿</button>
+                )}
             </div>
             <FileUploader postId={postId} setIsFileUploaded={setIsFileUploaded}/>
             <input type="text" placeholder="掃除をしよう！" value={body} onChange={(e) => handleInputChange(e.target.value)} />
