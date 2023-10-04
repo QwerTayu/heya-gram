@@ -20,7 +20,7 @@ function home() {
         <MainContainer>
             {/* コンテンツ */}
             {posts.map((post) => (
-                <div key={post.postId}>
+                <div key={post.postId} className=''>
                     <Post
                         userId={post.username}
                         pImageURL={post.imageURL}
