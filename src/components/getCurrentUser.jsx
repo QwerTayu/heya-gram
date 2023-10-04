@@ -1,8 +1,10 @@
+import { currentUserState } from "@/states/currentUserState"
 import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
+import { useRecoilState } from "recoil"
 
 export const GetCurrentUser = () => {
-    const [currentUser, setCurrentUser] = useState(null)
+    const [currentUser, setCurrentUser] = useRecoilState(currentUserState)
     const [isFetched, setIsFetched] = useState(false)
     const [isSession, setIsSession] = useState(false)
     useEffect(() => {
