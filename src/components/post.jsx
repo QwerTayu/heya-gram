@@ -1,5 +1,5 @@
 import React from 'react'
-import { PiCalendarCheckBold, PiChatBold, PiDotsThreeVerticalBold, PiHeartBold } from 'react-icons/pi';
+import { PiBookmarkSimpleBold, PiCalendarCheckBold, PiChatBold, PiDotsThreeVerticalBold, PiHeartBold, PiLockSimpleFill } from 'react-icons/pi';
 
 function formatTimeStamp(timeStamp) {
     const date = timeStamp.toDate();
@@ -12,7 +12,7 @@ function formatTimeStamp(timeStamp) {
     return `${year}/${month}/${day} ${hours}:${minutes}`;
 }
 
-function Post({ userId, pImageURL, pBody, pLikeCnt, timeStamp }) {
+function Post({ userId, pImageURL, pBody, pLikeCnt, pReplyCnt, pBookmarkCnt, pDayCnt, timeStamp, isPrivate }) {
     const formattedTimeStamp = formatTimeStamp(timeStamp);
         
     return (
@@ -25,7 +25,14 @@ function Post({ userId, pImageURL, pBody, pLikeCnt, timeStamp }) {
                     <div className='ml-2 font-semibold flex flex-col justify-center'>{userId}</div>
                 </div>
                 <div className='flex'>
-                    <div className='flex flex-col justify-center text-gray-400 pr-2'>{formattedTimeStamp}</div>
+                    {isPrivate ?
+                        <div className='flex flex-col justify-center'>
+                            <PiLockSimpleFill size={20} />
+                        </div>
+                        :
+                        <></>
+                    }
+                    <div className='flex flex-col justify-center text-gray-400 px-2'>{formattedTimeStamp}</div>
                     <div className='flex flex-col justify-center'>
                         <PiDotsThreeVerticalBold size={24} />
                     </div>
@@ -44,11 +51,15 @@ function Post({ userId, pImageURL, pBody, pLikeCnt, timeStamp }) {
                 </div>
                 <div className='flex justify-between gap-2 py-2'>
                     <PiChatBold size={24} />
-                    <div>{3}</div>
+                    <div>{pReplyCnt}</div>
+                </div>
+                <div className='flex justify-between gap-2 py-2'>
+                    <PiBookmarkSimpleBold size={24} />
+                    <div>{pBookmarkCnt}</div>
                 </div>
                 <div className='flex justify-between gap-2 py-2'>
                     <PiCalendarCheckBold size={24} />
-                    <div>{2}</div>
+                    <div>{pDayCnt}</div>
                 </div>
             </div>
         </div>
