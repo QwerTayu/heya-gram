@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebase";
-import { doc, setDoc, ServerTimestamp } from "firebase/firestore";
+import { FieldValue, doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 export const useFirestore = () => {
     const createPost = async (postId, userId, pBody, pCommentTo, pImageURL) => {
@@ -9,7 +9,7 @@ export const useFirestore = () => {
                 body: pBody,
                 username: userId,
                 commentTo: pCommentTo,
-                createdAt: ServerTimestamp.now(),
+                createdAt: serverTimestamp(FieldValue),
                 imageURL: pImageURL,
                 like_count: 0,
             });
