@@ -13,6 +13,9 @@ export const useFirestore = () => {
                 createdAt: serverTimestamp(FieldValue),
                 imageURL: pImageURL,
                 like_cnt: 0,
+                reply_cnt: 0,
+                bookmark_cnt: 0,
+                day_cnt: 0,
                 isPrivate: isPrivate,
             });
         }catch(error){
