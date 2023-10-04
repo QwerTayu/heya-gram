@@ -2,7 +2,7 @@ import { db } from "@/lib/firebase";
 import { FieldValue, doc, serverTimestamp, setDoc, getDocs, collection } from "firebase/firestore";
 
 export const useFirestore = () => {
-    const createPost = async (postId, userId, pBody, pCommentTo, pImageURL) => {
+    const createPost = async (postId, userId, pBody, pCommentTo, pImageURL, isPrivate) => {
         const pRef = doc(db, "posts", postId)
         try{
             await setDoc(pRef, {
@@ -13,6 +13,7 @@ export const useFirestore = () => {
                 createdAt: serverTimestamp(FieldValue),
                 imageURL: pImageURL,
                 like_cnt: 0,
+                isPrivate: isPrivate,
             });
         }catch(error){
             console.log(error);
