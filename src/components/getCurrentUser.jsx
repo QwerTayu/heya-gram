@@ -15,6 +15,7 @@ export const GetCurrentUser = () => {
     const { data: session } = useSession({ required: isSession })
     if (!isFetched && session && !currentUser) {
         setCurrentUser({
+            uid: session.user.uid,
             name: session.user.name,
             email: session.user.email,
             image: session.user.image,
