@@ -2,12 +2,18 @@ import React from 'react'
 import { PiCalendarCheckBold, PiChatBold, PiDotsThreeVerticalBold, PiHeartBold } from 'react-icons/pi';
 
 function formatTimeStamp(timeStamp) {
+    if (!timeStamp) {
+        return "N/A"; // タイムスタンプが null または未定義の場合、適切なエラーメッセージまたはデフォルト値を返す
+    }
+    
     const date = timeStamp.toDate();
-    const year = date.getUTCFullYear();
-    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
-    const day = date.getUTCDate().toString().padStart(2, '0');
-    const hours = date.getUTCHours().toString().padStart(2, '0');
-    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    const japanTime = new Date(date.toLocaleString("en-US", { timeZone: "Asia/Tokyo" })); // タイムゾーンを日本時間に変更
+
+    const year = japanTime.getFullYear();
+    const month = (japanTime.getMonth() + 1).toString().padStart(2, '0');
+    const day = japanTime.getDate().toString().padStart(2, '0');
+    const hours = japanTime.getHours().toString().padStart(2, '0');
+    const minutes = japanTime.getMinutes().toString().padStart(2, '0');
 
     return `${year}/${month}/${day} ${hours}:${minutes}`;
 }
