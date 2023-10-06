@@ -1,11 +1,24 @@
 import MainContainer from '@/components/mainContainer'
+import Post from '@/components/post'
+import { useFirestore } from '@/hooks/useFirestore'
 import { currentUserState } from '@/states/currentUserState'
 import { signOut } from 'next-auth/react'
-import React from 'react'
+import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 
 function username() {
-    const currentUser = useRecoilValue(currentUserState)
+    const currentUser = useRecoilValue(currentUserState);
+    const { showPosts } = useFirestore();
+    const [ posts, setPosts ] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const postsData = await showPosts();
+            setPosts(postsData);
+        };
+        fetchData();
+    }, []);
 
     return (
         <MainContainer>
@@ -49,34 +62,53 @@ function username() {
                                 </div>
                             </div>
                         </div>
-                        <div className='flex justify-space gap-2'>
-                            <div className='w-full px-5 py-2 bg-slate-100 rounded-3xl'>
-                                <h2 className='pb-3 text-md font-bold'>
-                                    お掃除記録
-                                </h2>
-                                <div className='flex flex-col gap-2 items-center justify-center'>
-                                    <span className='text-4xl'>🔥</span>
-                                    <span className='text-md font-bold'>3 Day</span>
-                                </div>
+                        
+                    </div>
+                    <div className='flex gap-2 py-3 w-full overflow-x-auto'>
+                        <div className='w-[120px] px-5 py-2 bg-slate-100 rounded-3xl'>
+                            <h2 className='pb-3 text-md font-bold flex justify-center'>
+                                お掃除記録
+                            </h2>
+                            <div className='flex flex-col gap-2 items-center justify-center'>
+                                <span className='text-4xl'>🔥</span>
+                                <span className='text-md font-bold'>3 Day</span>
                             </div>
-                            <div className='w-full px-5 py-2 bg-slate-100 rounded-3xl'>
-                                <h2 className='pb-3 text-md font-bold'>
-                                    お掃除記録
-                                </h2>
-                                <div className='flex flex-col gap-2 items-center justify-center'>
-                                    <span className='text-4xl'>🔥</span>
-                                    <span className='text-md font-bold'>3 Day</span>
-                                </div>
+                        </div>
+                        <div className='w-[120px] px-5 py-2 bg-slate-100 rounded-3xl'>
+                            <h2 className='pb-3 text-md font-bold flex justify-center'>
+                                お掃除記録
+                            </h2>
+                            <div className='flex flex-col gap-2 items-center justify-center'>
+                                <span className='text-4xl'>🔥</span>
+                                <span className='text-md font-bold'>3 Day</span>
                             </div>
                         </div>
                     </div>
-                    <p className='py-3 text-sm'>
+                    <p className='text-sm'>
                         お掃除の習慣を身につけたい現役JKです🥺💕 お掃除頑張ります😘 よろしくお願いします🙏
                     </p>
 
-                    <hr className='w-full my-5 mx-auto border-slate-400' />
+                    <hr className='w-full mt-5 mx-auto border-slate-400' />
 
-                    
+                    {posts
+                    .filter((post) => post.username === 'Taro') // userIdが'Tek1t0o'の投稿のみフィルタリング
+                    .sort((a, b) => b.timeStamp - a.timeStamp) // timeStampで降順にソート
+                    .map((post) => (
+                        <div key={post.postId} className=''>
+                            <Post
+                                userId={post.userId}
+                                username={post.username}
+                                pImageURL={post.imageURL}
+                                pBody={post.body}
+                                pLikeCnt={post.like_cnt}
+                                pReplyCnt={post.reply_cnt}
+                                pBookmarkCnt={post.bookmark_cnt}
+                                pDayCnt={post.day_cnt}
+                                timeStamp={post.createdAt}
+                                isPrivate={post.isPrivate}
+                            />
+                        </div>
+                    ))}
 
                     
                 </div>
