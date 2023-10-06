@@ -37,14 +37,17 @@ function username() {
     return (
         <MainContainer>
             {profileUser && (
-                <div className='w-full justify-between  py-2'>
-                    <div className='flex flex-col'>
+                <div className='w-full justify-between py-2'>
+                    <div className='flex flex-col px-2'>
                         <div className='flex gap-5 items-center'>
                             <img className='w-[60px] h-[60px] rounded-full' src={profileUser.image} alt={profileUser.name} />
                             <div className='w-full'>
-                                <h1 className='mb-3 text-xl font-bold'>{profileUser.name}</h1>
-                                {false ? (
-                                    <button className='block px-5 py-2 mx-auto mt-5 rounded-3xl text-base text-white bg-red-500 hover:bg-red-600 transition duration-300 ease-in-out'
+                                <div className='mb-3 flex items-center gap-2'>
+                                    <h1 className='text-xl font-bold'>{profileUser.name}</h1>
+                                    <p className='text-gray-500'>@{profileUser.uid}</p>
+                                </div>
+                                {(routerUserId === currentUser.uid) ? (
+                                    <button className='px-5 py-1 rounded-full text-white bg-red-500 hover:bg-red-600 transition duration-300 ease-in-out'
                                         onClick={() => signOut({ redirect: true, callbackUrl: '/' })}
                                     >
                                         ログアウトする
@@ -52,7 +55,7 @@ function username() {
                                 ) : (
                                     <>
                                         {true ? (
-                                            <button className='w-full px-5 py-1 text-white bg-cyan-400 rounded-full hover:bg-cyan-500 transition duration-300 ease-in-out'>
+                                            <button className='px-5 py-1 text-white bg-cyan-400 rounded-full hover:bg-cyan-500 transition duration-300 ease-in-out'>
                                                 フォローする
                                             </button>
                                         ) : (
@@ -63,15 +66,15 @@ function username() {
                                     </>
                                 )}
                             </div>
-                            <div className='flex gap-3'>
-                                <div className='pt-3'>
-                                    <span className='pr-2 text-sm'>フォロー</span>
-                                    <span className='font-semibold text-base'>1000</span>
-                                </div>
-                                <div className='pt-3'>
-                                    <span className='pr-2 text-sm'>フォロワー</span>
-                                    <span className='font-semibold text-base'>1000</span>
-                                </div>
+                        </div>
+                        <div className='flex gap-3'>
+                            <div className='pt-3'>
+                                <span className='pr-2 text-sm'>フォロー</span>
+                                <span className='font-semibold text-base'>1000</span>
+                            </div>
+                            <div className='pt-3'>
+                                <span className='pr-2 text-sm'>フォロワー</span>
+                                <span className='font-semibold text-base'>1000</span>
                             </div>
                         </div>
                     </div>
@@ -103,24 +106,25 @@ function username() {
                     <hr className='w-full mt-5 mx-auto border-slate-400' />
 
                     {posts
-                    .filter((post) => post.username === 'Taro') // TODO userIdに変更すること
-                    .sort((a, b) => b.timeStamp - a.timeStamp)
-                    .map((post) => (
-                        <div key={post.postId} className=''>
-                            <Post
-                                userId={post.userId}
-                                username={post.username}
-                                pImageURL={post.imageURL}
-                                pBody={post.body}
-                                pLikeCnt={post.like_cnt}
-                                pReplyCnt={post.reply_cnt}
-                                pBookmarkCnt={post.bookmark_cnt}
-                                pDayCnt={post.day_cnt}
-                                timeStamp={post.createdAt}
-                                isPrivate={post.isPrivate}
-                            />
-                        </div>
-                    ))}
+                        .filter((post) => post.userId === profileUser.uid) // TODO userIdに変更すること
+                        .sort((a, b) => b.createdAt.seconds - a.createdAt.seconds)
+                        .map((post) => (
+                            <div key={post.postId} className=''>
+                                <Post
+                                    userId={post.userId}
+                                    username={post.username}
+                                    pImageURL={post.imageURL}
+                                    pBody={post.body}
+                                    pLikeCnt={post.like_cnt}
+                                    pReplyCnt={post.reply_cnt}
+                                    pBookmarkCnt={post.bookmark_cnt}
+                                    pDayCnt={post.day_cnt}
+                                    timeStamp={post.createdAt}
+                                    isPrivate={post.isPrivate}
+                                />
+                            </div>
+                        ))
+                    }
                 </div >
             )}
         </MainContainer >
