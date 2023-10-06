@@ -25,14 +25,14 @@ function Post({ userId, username, userIconURL, pImageURL, pBody, pLikeCnt, pRepl
     return (
         <div className='border-b-2 border-gray-300 border-dashed m-[2px]'>
             <div className='flex flex-row justify-between w-full p-2'>
-                <div className='flex justify-between'>
-                    <Link href={`/users/${userId}`} className='flex flex-col justify-center'>
-                        <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-                            <img src={userIconURL} alt="" />
-                        </div>
-                        <div className='ml-2 font-semibold'>{username}</div>
-                    </Link>
-                </div>
+                <Link href={`/users/${userId}`} className=''>
+                    <div className='flex justify-between'>
+                            <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full">
+                                <img src={userIconURL} alt="" />
+                            </div>
+                            <div className='ml-2 font-semibold flex flex-col justify-center'>{username}</div>
+                    </div>
+                </Link>
                 <div className='flex'>
                     {isPrivate ?
                         <div className='flex flex-col justify-center'>
