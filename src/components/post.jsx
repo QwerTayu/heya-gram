@@ -23,14 +23,16 @@ function Post({ userId, username, userIconURL, pImageURL, pBody, pLikeCnt, pRepl
     const formattedTimeStamp = formatTimeStamp(timeStamp);
 
     return (
-        <div className='border-b-2 border-gray-300 border-dashed m-[2px]'>
+        <div className='border-b-2 border-gray-300 border-dashed m-[2px] bg-gray-50'>
             <div className='flex flex-row justify-between w-full p-2'>
                 <Link href={`/users/${userId}`} className=''>
                     <div className='flex justify-between'>
                             <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full">
                                 <img src={userIconURL} alt="" />
                             </div>
-                            <div className='ml-2 font-semibold flex flex-col justify-center'>{username}</div>
+                            <div className='ml-2 font-semibold flex flex-col justify-center' style={{ maxWidth: 'calc(100vw - 260px)' }}>
+                                <span className='line-clamp-1'>{username}</span>
+                            </div>
                     </div>
                 </Link>
                 <div className='flex'>
@@ -41,7 +43,6 @@ function Post({ userId, username, userIconURL, pImageURL, pBody, pLikeCnt, pRepl
                         :
                         <></>
                     }
-                    <div className='flex flex-col justify-center text-gray-400 px-2'>{formattedTimeStamp}</div>
                     <div className='flex flex-col justify-center'>
                         <PiDotsThreeVerticalBold size={24} />
                     </div>
@@ -52,6 +53,7 @@ function Post({ userId, username, userIconURL, pImageURL, pBody, pLikeCnt, pRepl
                     <img src={pImageURL} alt='post' className='h-full w-full object-cover rounded-lg' />
                 </div>
                 <div className='whitespace-pre-line p-2'>{pBody}</div>
+                <div className='text-sm flex justify-start text-gray-400 px-2'>{formattedTimeStamp}</div>
             </div>
             <div className='flex justify-around'>
                 <div className='flex justify-between gap-2 py-2'>
