@@ -91,8 +91,8 @@ function username() {
                     <hr className='w-full mt-5 mx-auto border-slate-400' />
 
                     {posts
-                    .filter((post) => post.username === 'Taro') // userIdが'Tek1t0o'の投稿のみフィルタリング
-                    .sort((a, b) => b.timeStamp - a.timeStamp) // timeStampで降順にソート
+                    .filter((post) => post.username === 'Taro') // TODO userIdに変更すること
+                    .sort((a, b) => b.timeStamp - a.timeStamp)
                     .map((post) => (
                         <div key={post.postId} className=''>
                             <Post
