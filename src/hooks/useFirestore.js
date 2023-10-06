@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebase";
-import { FieldValue, doc, serverTimestamp, setDoc, getDocs, collection } from "firebase/firestore";
+import { FieldValue, doc, serverTimestamp, setDoc, getDocs, collection, deleteDoc, getDoc } from "firebase/firestore";
 
 export const useFirestore = () => {
     const createPost = async (postId, userId, pBody, pCommentTo, pImageURL, isPrivate) => {
@@ -38,5 +38,55 @@ export const useFirestore = () => {
     //     }
     // }
 
-    return { createPost, showPosts };
+    const getProfileUserById = async (userId) => {
+        const snapShot = await getDoc(doc(db, "users", userId));
+        return snapShot.data();
+    }
+
+    const getProfileUserByName = async (userName) => {
+        const snapShot = await getDocs(collection(db, "users"));
+        return snapShot.docs.filter((doc) => doc.data().name === userName).map((doc) => {
+            const data = doc.data();
+            data.uid = doc.id;
+            return data;
+        });
+    }
+
+    const addFollowing = async (userId, followingId) => {
+        const followingRef = doc(db, "users", userId, "following", followingId);
+        const followerRef = doc(db, "users", followingId, "follower", userId);
+        try{
+            await setDoc(followingRef, {
+                userId: followingId,
+            });
+            await setDoc(followerRef, {
+                userId: userId,
+            });
+        }catch(error){
+            console.log(error);
+        }
+    }
+
+    const removeFollowing = async (userId, followingId) => {
+        const followingRef = doc(db, "users", userId, "following", followingId);
+        const followerRef = doc(db, "users", followingId, "follower", userId);
+        try{
+            await deleteDoc(followingRef);
+            await deleteDoc(followerRef);
+        }catch(error){
+            console.log(error);
+        }
+    }
+
+    const getFollowing = async (userId) => {
+        const snapShot = await getDocs(collection(db, "users", userId, "following"));
+        return snapShot.docs.map((doc) => ({ ...doc.data() }));
+    }
+
+    const getFollower = async (userId) => {
+        const snapShot = await getDocs(collection(db, "users", userId, "follower"));
+        return snapShot.docs.map((doc) => ({ ...doc.data() }));
+    }
+
+    return { createPost, showPosts, getProfileUserById, getProfileUserByName, addFollowing, removeFollowing, getFollowing, getFollower };
 };
