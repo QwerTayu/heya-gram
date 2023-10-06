@@ -14,7 +14,7 @@ function create() {
     const [ postId, setPostId ] = useState('postId');
     const [ isPrivate, setIsPrivate ] = useState(true);
     const [ isFileUploaded, setIsFileUploaded ] = useState(false);
-    const [ userId, setUserId ] = useState('Tek1t0o6It5uk9');
+    const [ userId, setUserId ] = useState('Tek1t0o6It5uk9'); // ここは後で変更してください
     const [ username, setUsername ] = useState('Taro');
 
     const randomSlug = Randomstring.generate(16);

@@ -91,7 +91,7 @@ function username() {
                     <hr className='w-full mt-5 mx-auto border-slate-400' />
 
                     {posts
-                    .filter((post) => post.username === 'Taro') // TODO userIdに変更すること
+                    .filter((post) => post.userId === 'Tek1t0o6It5uk9') // TODO currentUserに変更すること
                     .sort((a, b) => b.timeStamp - a.timeStamp)
                     .map((post) => (
                         <div key={post.postId} className=''>
