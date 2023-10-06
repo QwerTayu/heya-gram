@@ -20,7 +20,7 @@ function home() {
     }, []);
 
     return (
-        <MainContainer>
+        <MainContainer active='home'>
             {/* コンテンツ */}
             {posts
             .sort((a, b) => b.createdAt.seconds - a.createdAt.seconds)

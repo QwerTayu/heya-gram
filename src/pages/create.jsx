@@ -13,7 +13,7 @@ function create() {
     const [body, setBody] = useState('');
     const { createPost } = useFirestore();
     const { showImage, deleteImage } = useStorage();
-    const [postId, setPostId] = useState('postId');
+    const [postId, setPostId] = useState('');
     const [isPrivate, setIsPrivate] = useState(true);
     const [isFileUploaded, setIsFileUploaded] = useState(false);
     const [userId, setUserId] = useState('');
@@ -50,7 +50,7 @@ function create() {
     }
 
     return (
-        <MainContainer>
+        <MainContainer active='create'>
             <div className='flex justify-between'>
                 <button type='button' onClick={() => reversePost()} className='p-2'>
                     <PiArrowLeftBold size={24} />

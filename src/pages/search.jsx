@@ -23,7 +23,7 @@ export default function Search() {
     console.log(profileUser)
 
     return (
-        <MainContainer>
+        <MainContainer active='search'>
             <div>
                 <h1 className='pl-5 pb-5 text-2xl font-bold'>ユーザー検索</h1>
                 <div className='flex items-center justify-center w-full px-3'>

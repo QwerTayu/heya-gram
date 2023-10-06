@@ -39,7 +39,7 @@ function username() {
     }, [router, currentUser])
 
     return (
-        <MainContainer>
+        <MainContainer active={profileUser ? profileUser.uid : 'user'}>
             {profileUser && (
                 <div className='w-full justify-between py-2'>
                     <div className='flex flex-col px-2'>
@@ -111,16 +111,16 @@ function username() {
                         <ul className="flex -mb-px text-sm font-medium text-center">
                             <li className="w-[50%] mr-2">
                                 {isTabPost ? (
-                                    <button className="inline-block p-2 border-b-2 border-gray-300 rounded-t-lg">Post</button>
+                                    <button className="w-full inline-block p-2 border-b-2 border-gray-300 rounded-t-lg">Post</button>
                                 ) : (
-                                    <button className="inline-block p-2 border-b-2 border-transparent rounded-t-lg" onClick={() => setIsTabPost(!isTabPost)}>Post</button>
+                                    <button className="w-full inline-block p-2 border-b-2 border-transparent rounded-t-lg" onClick={() => setIsTabPost(!isTabPost)}>Post</button>
                                 )}
                             </li>
                             <li className="w-[50%] mr-2">
                                 {!isTabPost ? (
-                                    <button className="inline-block p-2 border-b-2 border-gray-300 rounded-t-lg">Like</button>
+                                    <button className="w-full inline-block p-2 border-b-2 border-gray-300 rounded-t-lg">Like</button>
                                 ) : (
-                                    <button className="inline-block p-2 border-b-2 border-transparent rounded-t-lg" onClick={() => setIsTabPost(!isTabPost)}>Like</button>
+                                    <button className="w-full inline-block p-2 border-b-2 border-transparent rounded-t-lg" onClick={() => setIsTabPost(!isTabPost)}>Like</button>
                                 )}
                             </li>
                         </ul>
