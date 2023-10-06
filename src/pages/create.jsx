@@ -2,10 +2,12 @@ import FileUploader from '@/components/fileUploader';
 import MainContainer from '@/components/mainContainer'
 import { useFirestore } from '@/hooks/useFirestore';
 import { useStorage } from '@/hooks/useStorage';
+import { currentUserState } from '@/states/currentUserState';
 import { router } from 'next/router'
 import Randomstring from 'randomstring'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { PiArrowLeftBold, PiPaperPlaneTiltBold } from 'react-icons/pi';
+import { useRecoilValue } from 'recoil';
 
 function create() {
     const [ body, setBody ] = useState('');
@@ -14,14 +16,20 @@ function create() {
     const [ postId, setPostId ] = useState('postId');
     const [ isPrivate, setIsPrivate ] = useState(true);
     const [ isFileUploaded, setIsFileUploaded ] = useState(false);
-    const [ userId, setUserId ] = useState('Tek1t0o6It5uk9');
-    const [ username, setUsername ] = useState('Taro');
+    const [ userId, setUserId ] = useState('');
+    const [ username, setUsername ] = useState('');
 
     const randomSlug = Randomstring.generate(16);
+    const currnetUser = useRecoilValue(currentUserState);
 
     useEffect(() => {
         setPostId(randomSlug);
     }, []);
+
+    useMemo(() => {
+        setUserId(currnetUser.uid);
+        setUsername(currnetUser.name);
+    }, [currnetUser])
 
     const handleInputChange = (value) => {
         setBody(value);
