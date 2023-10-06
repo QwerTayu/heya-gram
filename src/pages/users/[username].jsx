@@ -120,8 +120,6 @@ function username() {
                                     pImageURL={post.imageURL}
                                     pBody={post.body}
                                     pLikeCnt={post.like_cnt}
-                                    pReplyCnt={post.reply_cnt}
-                                    pBookmarkCnt={post.bookmark_cnt}
                                     pDayCnt={post.day_cnt}
                                     timeStamp={post.createdAt}
                                     isPrivate={post.isPrivate}

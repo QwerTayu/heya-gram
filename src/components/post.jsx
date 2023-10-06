@@ -19,7 +19,7 @@ function formatTimeStamp(timeStamp) {
     return `${year}/${month}/${day} ${hours}:${minutes}`;
 }
 
-function Post({ userId, username, userIconURL, pImageURL, pBody, pLikeCnt, pReplyCnt, pBookmarkCnt, pDayCnt, timeStamp, isPrivate }) {
+function Post({ userId, username, userIconURL, pImageURL, pBody, pLikeCnt, pDayCnt, timeStamp, isPrivate }) {
     const formattedTimeStamp = formatTimeStamp(timeStamp);
 
     return (
@@ -30,7 +30,7 @@ function Post({ userId, username, userIconURL, pImageURL, pBody, pLikeCnt, pRepl
                             <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full">
                                 <img src={userIconURL} alt="" />
                             </div>
-                            <div className='ml-2 font-semibold flex flex-col justify-center' style={{ maxWidth: 'calc(100vw - 260px)' }}>
+                            <div className='ml-2 font-semibold flex flex-col justify-center' style={{ maxWidth: 'calc(100vw - 80px)' }}>
                                 <span className='line-clamp-1'>{username}</span>
                             </div>
                     </div>
