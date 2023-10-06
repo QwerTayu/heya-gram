@@ -22,7 +22,8 @@ function home() {
             {posts.map((post) => (
                 <div key={post.postId} className=''>
                     <Post
-                        userId={post.username}
+                        userId={post.userId}
+                        username={post.username}
                         pImageURL={post.imageURL}
                         pBody={post.body}
                         pLikeCnt={post.like_cnt}

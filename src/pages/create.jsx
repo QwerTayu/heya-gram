@@ -14,6 +14,8 @@ function create() {
     const [ postId, setPostId ] = useState('postId');
     const [ isPrivate, setIsPrivate ] = useState(true);
     const [ isFileUploaded, setIsFileUploaded ] = useState(false);
+    const [ userId, setUserId ] = useState('Tek1t0o6It5uk9');
+    const [ username, setUsername ] = useState('Taro');
 
     const randomSlug = Randomstring.generate(16);
 
@@ -27,7 +29,7 @@ function create() {
 
     const sendPost = async () => {
         const imageURL = await showImage(postId);
-        await createPost(postId, "Taro", body, null, imageURL, isPrivate); // postId, userId, pBody, pCommentTo, pImageURL
+        await createPost(userId, postId, username, body, null, imageURL, isPrivate); // postId, userId, pBody, pCommentTo, pImageURL
         console.log('投稿しました', imageURL);
         router.push('/home');
     };
