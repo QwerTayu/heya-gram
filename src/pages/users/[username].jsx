@@ -10,13 +10,16 @@ import { useRecoilValue } from 'recoil'
 function username() {
     const currentUser = useRecoilValue(currentUserState)
     const [profileUser, setProfileUser] = useState(null);
-    const { getProfileUserById, showPosts } = useFirestore();
+    const { getProfileUserById, showPosts, getAllUsers } = useFirestore();
     const [posts, setPosts] = useState([]);
+    const [ users, setUsers ] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             const postsData = await showPosts();
+            const usersData = await getAllUsers();
             setPosts(postsData);
+            setUsers(usersData);
         };
         fetchData();
     }, []);
@@ -113,6 +116,7 @@ function username() {
                                 <Post
                                     userId={post.userId}
                                     username={post.username}
+                                    userIconURL={users.find((user) => user.uid === post.userId)?.image}
                                     pImageURL={post.imageURL}
                                     pBody={post.body}
                                     pLikeCnt={post.like_cnt}
