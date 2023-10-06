@@ -44,7 +44,10 @@ export const useFirestore = () => {
 
     const getProfileUserById = async (userId) => {
         const snapShot = await getDoc(doc(db, "users", userId));
-        return snapShot.data();
+        return {
+            ...snapShot.data(),
+            uid: snapShot.id,
+        };
     }
 
     const getProfileUserByName = async (userName) => {
@@ -54,6 +57,14 @@ export const useFirestore = () => {
             data.uid = doc.id;
             return data;
         });
+    }
+
+    const getAllUsers = async () => {
+        const snapShot = await getDocs(collection(db, "users"));
+        return snapShot.docs.map((doc) => ({
+            ...doc.data(),
+            uid: doc.id,
+        }));
     }
 
     const addFollowing = async (userId, followingId) => {
@@ -92,5 +103,5 @@ export const useFirestore = () => {
         return snapShot.docs.map((doc) => ({ ...doc.data() }));
     }
 
-    return { createPost, showPosts, getProfileUserById, getProfileUserByName, addFollowing, removeFollowing, getFollowing, getFollower };
+    return { createPost, showPosts, getProfileUserById, getProfileUserByName, getAllUsers, addFollowing, removeFollowing, getFollowing, getFollower };
 };
