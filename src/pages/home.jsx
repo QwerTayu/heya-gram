@@ -22,11 +22,16 @@ function home() {
             {posts.map((post) => (
                 <div key={post.postId} className=''>
                     <Post
-                        userId={post.username}
+                        userId={post.userId}
+                        username={post.username}
                         pImageURL={post.imageURL}
                         pBody={post.body}
-                        pLikeCnt={2}
+                        pLikeCnt={post.like_cnt}
+                        pReplyCnt={post.reply_cnt}
+                        pBookmarkCnt={post.bookmark_cnt}
+                        pDayCnt={post.day_cnt}
                         timeStamp={post.createdAt}
+                        isPrivate={post.isPrivate}
                     />
                 </div>
             ))}

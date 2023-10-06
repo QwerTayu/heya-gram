@@ -1,18 +1,25 @@
+import Link from 'next/link';
 import React from 'react'
-import { PiCalendarCheckBold, PiChatBold, PiDotsThreeVerticalBold, PiHeartBold } from 'react-icons/pi';
+import { PiBookmarkSimpleBold, PiCalendarCheckBold, PiChatBold, PiDotsThreeVerticalBold, PiHeartBold, PiLockSimpleFill } from 'react-icons/pi';
 
 function formatTimeStamp(timeStamp) {
+    if (!timeStamp) {
+        return "N/A"; // タイムスタンプが null または未定義の場合、適切なエラーメッセージまたはデフォルト値を返す
+    }
+    
     const date = timeStamp.toDate();
-    const year = date.getUTCFullYear();
-    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
-    const day = date.getUTCDate().toString().padStart(2, '0');
-    const hours = date.getUTCHours().toString().padStart(2, '0');
-    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    const japanTime = new Date(date.toLocaleString("en-US", { timeZone: "Asia/Tokyo" })); // タイムゾーンを日本時間に変更
+
+    const year = japanTime.getFullYear();
+    const month = (japanTime.getMonth() + 1).toString().padStart(2, '0');
+    const day = japanTime.getDate().toString().padStart(2, '0');
+    const hours = japanTime.getHours().toString().padStart(2, '0');
+    const minutes = japanTime.getMinutes().toString().padStart(2, '0');
 
     return `${year}/${month}/${day} ${hours}:${minutes}`;
 }
 
-function Post({ userId, pImageURL, pBody, pLikeCnt, timeStamp }) {
+function Post({ userId, username, pImageURL, pBody, pLikeCnt, pReplyCnt, pBookmarkCnt, pDayCnt, timeStamp, isPrivate }) {
     const formattedTimeStamp = formatTimeStamp(timeStamp);
         
     return (
@@ -22,10 +29,17 @@ function Post({ userId, pImageURL, pBody, pLikeCnt, timeStamp }) {
                     <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
                         <svg className="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path></svg>
                     </div>
-                    <div className='ml-2 font-semibold flex flex-col justify-center'>{userId}</div>
+                    <Link href={"/" + userId} className='flex flex-col justify-center'><div className='ml-2 font-semibold'>{username}</div></Link>
                 </div>
                 <div className='flex'>
-                    <div className='flex flex-col justify-center text-gray-400 pr-2'>{formattedTimeStamp}</div>
+                    {isPrivate ?
+                        <div className='flex flex-col justify-center'>
+                            <PiLockSimpleFill size={20} />
+                        </div>
+                        :
+                        <></>
+                    }
+                    <div className='flex flex-col justify-center text-gray-400 px-2'>{formattedTimeStamp}</div>
                     <div className='flex flex-col justify-center'>
                         <PiDotsThreeVerticalBold size={24} />
                     </div>
@@ -44,11 +58,15 @@ function Post({ userId, pImageURL, pBody, pLikeCnt, timeStamp }) {
                 </div>
                 <div className='flex justify-between gap-2 py-2'>
                     <PiChatBold size={24} />
-                    <div>{3}</div>
+                    <div>{pReplyCnt}</div>
+                </div>
+                <div className='flex justify-between gap-2 py-2'>
+                    <PiBookmarkSimpleBold size={24} />
+                    <div>{pBookmarkCnt}</div>
                 </div>
                 <div className='flex justify-between gap-2 py-2'>
                     <PiCalendarCheckBold size={24} />
-                    <div>{2}</div>
+                    <div>{pDayCnt}</div>
                 </div>
             </div>
         </div>
