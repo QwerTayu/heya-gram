@@ -51,6 +51,11 @@ export const useFirestore = () => {
         }));
     }
 
+    const addLike = async (postId, userId, isLiked, setIsLiked, totalLikes) => {
+        const [likes, setLikes] = useState(totalLikes);
+        const postRef = doc(db, "posts", postId);
+    }
+
     const addFollowing = async (userId, followingId) => {
         const followingRef = doc(db, "users", userId, "following", followingId);
         const followerRef = doc(db, "users", followingId, "follower", userId);
