@@ -1,10 +1,10 @@
 import { db } from "@/lib/firebase";
-import { FieldValue, doc, serverTimestamp, setDoc, getDocs, collection, deleteDoc, getDoc } from "firebase/firestore";
+import { FieldValue, doc, serverTimestamp, setDoc, getDocs, collection, deleteDoc, getDoc, updateDoc } from "firebase/firestore";
 
 export const useFirestore = () => {
     const createPost = async (username, postId, userId, pBody, pImageURL, isPrivate) => {
         const pRef = doc(db, "posts", postId)
-        try{
+        try {
             await setDoc(pRef, {
                 postId: postId,
                 body: pBody,
@@ -16,7 +16,7 @@ export const useFirestore = () => {
                 day_cnt: 0,
                 isPrivate: isPrivate,
             });
-        }catch(error){
+        } catch (error) {
             console.log(error);
         }
     };
@@ -51,22 +51,52 @@ export const useFirestore = () => {
         }));
     }
 
-    const addLike = async (postId, userId, isLiked, setIsLiked, totalLikes) => {
-        const [likes, setLikes] = useState(totalLikes);
+    // const getLikes = async (setIsLiked, setLikeCounts, currentUserId, postId) => {
+    //     const snapShot = await getDocs(collection(db, "posts", postId, "liked"));
+    //     const posts = snapShot.docs.map((doc) => ({ ...doc.data() }));
+
+    //     const filteredPost = posts.filter((post) => post.userId === currentUserId);
+    //     const isLikedData = filteredPost.length > 0 ? true : false;
+    //     setIsLiked(isLikedData)
+
+    //     setLikeCounts(posts.length)
+    // }
+
+    const updateLikes = async (currentUserId, postId, LikedArr, isLiked, setIsLiked, likeCounts, setLikeCounts) => {
         const postRef = doc(db, "posts", postId);
+
+        // console.log(`currentUserId: ${currentUserId}`)
+        // console.log(`postId: ${postId}`)
+        // console.log(`isLiked: ${isLiked}`)
+        // console.log(`likeCounts: ${likeCounts}`)
+
+        if (isLiked) {
+            setIsLiked(false) // いいねを取り消したユーザーの状態を更新
+            setLikeCounts(likeCounts - 1) // いいね数を更新
+            await updateDoc(postRef, {
+                liked: LikedArr.filter((liked) => liked !== currentUserId),
+            }) // 投稿のいいねを取り消したユーザーを削除
+        } else {
+            setIsLiked(true) // いいねしたユーザーの状態を更新
+            setLikeCounts(likeCounts + 1) // いいね数を更新
+            await updateDoc(postRef, {
+                liked: [...LikedArr, currentUserId],
+            }) // 投稿にいいねしたユーザーを追加
+            console.log([...LikedArr, currentUserId])
+        }
     }
 
     const addFollowing = async (userId, followingId) => {
         const followingRef = doc(db, "users", userId, "following", followingId);
         const followerRef = doc(db, "users", followingId, "follower", userId);
-        try{
+        try {
             await setDoc(followingRef, {
                 userId: followingId,
             });
             await setDoc(followerRef, {
                 userId: userId,
             });
-        }catch(error){
+        } catch (error) {
             console.log(error);
         }
     }
@@ -74,10 +104,10 @@ export const useFirestore = () => {
     const removeFollowing = async (userId, followingId) => {
         const followingRef = doc(db, "users", userId, "following", followingId);
         const followerRef = doc(db, "users", followingId, "follower", userId);
-        try{
+        try {
             await deleteDoc(followingRef);
             await deleteDoc(followerRef);
-        }catch(error){
+        } catch (error) {
             console.log(error);
         }
     }
@@ -92,5 +122,5 @@ export const useFirestore = () => {
         return snapShot.docs.map((doc) => ({ ...doc.data() }));
     }
 
-    return { createPost, showPosts, getProfileUserById, getProfileUserByName, getAllUsers, addFollowing, removeFollowing, getFollowing, getFollower };
+    return { createPost, showPosts, getProfileUserById, getProfileUserByName, getAllUsers, updateLikes, addFollowing, removeFollowing, getFollowing, getFollower };
 };
