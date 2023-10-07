@@ -35,30 +35,28 @@ function username() {
     }, []);
 
     useEffect(() => {
-        if (currentUser) {
-            const checkFollowerCnt = async () => {
-                const followerArray = await getFollower(routerUserId);
+        if (currentUser && profileUser) {
+            const checkFF = async () => {
+                const followerArray = await getFollower(profileUser.uid);
                 setFollowerCnt(followerArray.length);
-            };
-            const checkFollowingCnt = async () => {
-                const followingArray = await getFollowing(routerUserId);
+                const followingArray = await getFollowing(profileUser.uid);
                 setFollowingCnt(followingArray.length);
-            }
-            checkFollowingCnt();
-            checkFollowerCnt();
+            };
+            checkFF();
         }
-    }, [currentUser, isFollowing, router]);
+    }, [ isFollowing, profileUser]);
 
     useEffect(() => {
-        if (currentUser && profileUser) {
-            
-            const checkFollowing = async () => {
-                const followingArray = await getFollowing(currentUser.uid);
-                setIsFollowing(!followingArray.includes(routerUserId));
+        if (profileUser) {
+            const checkFollower = async () => {
+                const followerArray = await getFollower(profileUser.uid);
+                const followerIds = followerArray.map(item => item.userId);
+                const isCurrentUserFollowing = followerIds.includes(currentUser.uid);
+                setIsFollowing(isCurrentUserFollowing);
             };
-            checkFollowing();
+            checkFollower();
         }
-    }, [currentUser, profileUser]);
+    }, [profileUser]);
 
     useMemo(async () => {
         if (router.isReady && currentUser) {
@@ -67,15 +65,16 @@ function username() {
                 const user = await getProfileUserById(routerUserId);
                 setProfileUser(user)
             }
+            console.log("changed");
         }
     }, [router, currentUser])
 
 
     const handleFollow = async () => {
         if (isFollowing) {
-            await removeFollowing(currentUser.uid, routerUserId);
+            await removeFollowing(currentUser.uid, profileUser.uid);
         } else {
-            await addFollowing(currentUser.uid, routerUserId);
+            await addFollowing(currentUser.uid, profileUser.uid);
         }
 
         // フォロー状態をトグル
