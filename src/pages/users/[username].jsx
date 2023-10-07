@@ -1,8 +1,10 @@
 import MainContainer from '@/components/mainContainer'
+import Modal from '@/components/modal'
 import Post from '@/components/post'
 import { useFirestore } from '@/hooks/useFirestore'
 import { currentUserState } from '@/states/currentUserState'
 import { signOut } from 'next-auth/react'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useRecoilValue } from 'recoil'
@@ -17,6 +19,8 @@ function username() {
     const [ isFollowing, setIsFollowing ] = useState(false);
     const [ followingCnt, setFollowingCnt ] = useState(0);
     const [ followerCnt, setFollowerCnt ] = useState(0);
+    const [ isFollowingModalOpen, setIsFollowingModalOpen ] = useState(false);
+    const [ isFollowerModalOpen, setIsFollowerModalOpen ] = useState(false);
     const router = useRouter();
     const routerUserId = router.query.username;
 
@@ -55,9 +59,6 @@ function username() {
             checkFollowing();
         }
     }, [currentUser, profileUser]);
-
-    console.log("Follow:", followingCnt, ", Follower:", followerCnt);
-
 
     useMemo(async () => {
         if (router.isReady && currentUser) {
@@ -107,15 +108,21 @@ function username() {
                             </div>
                         </div>
                         <div className='flex gap-3'>
-                            <div className='pt-3'>
+                            <div className='pt-3' onClick={() => setIsFollowingModalOpen(true)}>
                                 <span className='pr-2 text-sm'>フォロー</span>
                                 <span className='font-semibold text-base'>{followingCnt}</span>
                             </div>
-                            <div className='pt-3'>
+                            <div className='pt-3' onClick={() => setIsFollowerModalOpen(true)}>
                                 <span className='pr-2 text-sm'>フォロワー</span>
                                 <span className='font-semibold text-base'>{followerCnt}</span>
                             </div>
                         </div>
+                        <Modal open={isFollowingModalOpen} onClose={() => setIsFollowingModalOpen(false)}> {/* Following */}
+                            
+                        </Modal>
+                        <Modal open={isFollowerModalOpen} onClose={() => setIsFollowerModalOpen(false)}> {/* Follower */}
+                            
+                        </Modal>
                     </div>
                     <div className='flex gap-2 py-3 w-full px-2 overflow-x-auto'>
                         <div className='w-[50%] px-5 py-2 bg-slate-100 rounded-3xl'>
