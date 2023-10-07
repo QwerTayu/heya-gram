@@ -140,7 +140,7 @@ function username() {
                             </h2>
                             <div className='flex flex-col gap-2 items-center justify-center'>
                                 <span className='text-4xl'>💕</span>
-                                <span className='text-md font-bold'>3 Day</span>
+                                <span className='text-md font-bold'>3 Link</span>
                             </div>
 
                         </div>
