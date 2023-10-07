@@ -47,7 +47,7 @@ function username() {
                             <img className='w-[60px] h-[60px] rounded-full' src={profileUser.image} alt={profileUser.name} />
                             <div className='w-full'>
                                 <div className='mb-3 flex items-center gap-2'>
-                                    <h1 className='text-xl font-bold'>{profileUser.name}</h1>
+                                    <h1 className='text-xl font-bold'><span className='line-clamp-1'>{profileUser.name}</span></h1>
                                     <p className='text-gray-500'>@{profileUser.uid}</p>
                                 </div>
                                 {(routerUserId === currentUser.uid) ? (
