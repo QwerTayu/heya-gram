@@ -152,7 +152,7 @@ function username() {
                         ) : (
                             <>
                                 {posts
-                                    .filter((post) => post.userId !== profileUser.uid) // Likeされたポストに変更すること
+                                    .filter((post) => post.liked?.find((like) => like === profileUser.uid))
                                     .sort((a, b) => b.createdAt.seconds - a.createdAt.seconds)
                                     .map((post) => (
                                         <div key={post.postId} className=''>
