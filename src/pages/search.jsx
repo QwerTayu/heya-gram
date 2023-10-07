@@ -3,6 +3,7 @@ import { useFirestore } from '@/hooks/useFirestore'
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import { PiMagnifyingGlassBold } from 'react-icons/pi';
 
 export default function Search() {
     const { getProfileUserById, getProfileUserByName } = useFirestore();
@@ -22,19 +23,19 @@ export default function Search() {
     console.log(profileUser)
 
     return (
-        <MainContainer>
+        <MainContainer active='search'>
             <div>
                 <h1 className='pl-5 pb-5 text-2xl font-bold'>ユーザー検索</h1>
-                <div className='flex items-center justify-center w-full'>
+                <div className='flex items-center justify-center w-full px-3'>
                     <input
                         className='w-[300px] px-5 py-1 rounded-full border border-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-400'
                         type="text" value={input}
                         onChange={(e) => setInput(e.target.value)} />
                     <button
-                        className='px-5 py-1 ml-2 text-white bg-cyan-400 rounded-full hover:bg-cyan-500 transition duration-300 ease-in-out'
+                        className='px-3 py-2 ml-2 text-white bg-cyan-400 rounded-full hover:bg-cyan-500 transition duration-300 ease-in-out'
                         onClick={() => handleProfileUserByName()}
                     >
-                        検索
+                        <PiMagnifyingGlassBold size={20} />
                     </button>
                 </div>
 

@@ -10,13 +10,17 @@ import { useRecoilValue } from 'recoil'
 function username() {
     const currentUser = useRecoilValue(currentUserState)
     const [profileUser, setProfileUser] = useState(null);
-    const { getProfileUserById, showPosts } = useFirestore();
+    const { getProfileUserById, showPosts, getAllUsers } = useFirestore();
     const [posts, setPosts] = useState([]);
+    const [ users, setUsers ] = useState([]);
+    const [ isTabPost, setIsTabPost ] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             const postsData = await showPosts();
+            const usersData = await getAllUsers();
             setPosts(postsData);
+            setUsers(usersData);
         };
         fetchData();
     }, []);
@@ -35,7 +39,7 @@ function username() {
     }, [router, currentUser])
 
     return (
-        <MainContainer>
+        <MainContainer active={profileUser ? profileUser.uid : 'user'}>
             {profileUser && (
                 <div className='w-full justify-between py-2'>
                     <div className='flex flex-col px-2'>
@@ -43,7 +47,7 @@ function username() {
                             <img className='w-[60px] h-[60px] rounded-full' src={profileUser.image} alt={profileUser.name} />
                             <div className='w-full'>
                                 <div className='mb-3 flex items-center gap-2'>
-                                    <h1 className='text-xl font-bold'>{profileUser.name}</h1>
+                                    <h1 className='text-xl font-bold'><span className='line-clamp-1'>{profileUser.name}</span></h1>
                                     <p className='text-gray-500'>@{profileUser.uid}</p>
                                 </div>
                                 {(routerUserId === currentUser.uid) ? (
@@ -102,29 +106,75 @@ function username() {
                     <p className='text-sm px-2'>
                         お掃除の習慣を身につけたい現役JKです🥺💕 お掃除頑張ります😘 よろしくお願いします🙏
                     </p>
+                    
+                    <div className="m-4 border-b border-gray-200">
+                        <ul className="flex -mb-px text-sm font-medium text-center">
+                            <li className="w-[50%] mr-2">
+                                {isTabPost ? (
+                                    <button className="w-full inline-block p-2 border-b-2 border-gray-300 rounded-t-lg">Post</button>
+                                ) : (
+                                    <button className="w-full inline-block p-2 border-b-2 border-transparent rounded-t-lg" onClick={() => setIsTabPost(!isTabPost)}>Post</button>
+                                )}
+                            </li>
+                            <li className="w-[50%] mr-2">
+                                {!isTabPost ? (
+                                    <button className="w-full inline-block p-2 border-b-2 border-gray-300 rounded-t-lg">Like</button>
+                                ) : (
+                                    <button className="w-full inline-block p-2 border-b-2 border-transparent rounded-t-lg" onClick={() => setIsTabPost(!isTabPost)}>Like</button>
+                                )}
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="myTabContent">
+                        { isTabPost ? (
+                            <>
+                                {posts
+                                    .filter((post) => post.userId === profileUser.uid)
+                                    .sort((a, b) => b.createdAt.seconds - a.createdAt.seconds)
+                                    .map((post) => (
+                                        <div key={post.postId} className=''>
+                                            <Post
+                                                userId={post.userId}
+                                                username={post.username}
+                                                userIconURL={users.find((user) => user.uid === post.userId)?.image}
+                                                pImageURL={post.imageURL}
+                                                pBody={post.body}
+                                                pLikeCnt={post.like_cnt}
+                                                pDayCnt={post.day_cnt}
+                                                timeStamp={post.createdAt}
+                                                isPrivate={post.isPrivate}
+                                            />
+                                        </div>
+                                    ))
+                                }
+                            </>
+                        ) : (
+                            <>
+                                {posts
+                                    .filter((post) => post.userId !== profileUser.uid) // Likeされたポストに変更すること
+                                    .sort((a, b) => b.createdAt.seconds - a.createdAt.seconds)
+                                    .map((post) => (
+                                        <div key={post.postId} className=''>
+                                            <Post
+                                                userId={post.userId}
+                                                username={post.username}
+                                                userIconURL={users.find((user) => user.uid === post.userId)?.image}
+                                                pImageURL={post.imageURL}
+                                                pBody={post.body}
+                                                pLikeCnt={post.like_cnt}
+                                                pDayCnt={post.day_cnt}
+                                                timeStamp={post.createdAt}
+                                                isPrivate={post.isPrivate}
+                                            />
+                                        </div>
+                                    ))
+                                }
+                            </>
+                        )}
+                    </div>
 
-                    <hr className='w-full mt-5 mx-auto border-slate-400' />
 
-                    {posts
-                        .filter((post) => post.userId === profileUser.uid) // TODO userIdに変更すること
-                        .sort((a, b) => b.createdAt.seconds - a.createdAt.seconds)
-                        .map((post) => (
-                            <div key={post.postId} className=''>
-                                <Post
-                                    userId={post.userId}
-                                    username={post.username}
-                                    pImageURL={post.imageURL}
-                                    pBody={post.body}
-                                    pLikeCnt={post.like_cnt}
-                                    pReplyCnt={post.reply_cnt}
-                                    pBookmarkCnt={post.bookmark_cnt}
-                                    pDayCnt={post.day_cnt}
-                                    timeStamp={post.createdAt}
-                                    isPrivate={post.isPrivate}
-                                />
-                            </div>
-                        ))
-                    }
+                    
                 </div >
             )}
         </MainContainer >

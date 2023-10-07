@@ -12,6 +12,36 @@ module.exports = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      height: {
+        'screen': [
+          '100vh','100dvh'
+        ]
+      },
+      minHeight: {
+        'screen': [
+          '100vh','100dvh'
+        ]
+      },
+      maxHeight: {
+        'screen': [
+          '100vh','100dvh'
+        ]
+      },
+      width: {
+        'screen': [
+          '100vw','100dvw'
+        ]
+      },
+      minWidth: {
+        'screen': [
+          '100vw','100dvw'
+        ]
+      },
+      maxWidth: {
+        'screen': [
+          '100vw','100dvw'
+        ]
+      }
     },
   },
   plugins: [],

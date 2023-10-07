@@ -19,20 +19,22 @@ function formatTimeStamp(timeStamp) {
     return `${year}/${month}/${day} ${hours}:${minutes}`;
 }
 
-function Post({ userId, username, userIconURL, pImageURL, pBody, pLikeCnt, pReplyCnt, pBookmarkCnt, pDayCnt, timeStamp, isPrivate }) {
+function Post({ userId, username, userIconURL, pImageURL, pBody, pLikeCnt, pDayCnt, timeStamp, isPrivate }) {
     const formattedTimeStamp = formatTimeStamp(timeStamp);
 
     return (
-        <div className='border-b-2 border-gray-300 border-dashed m-[2px]'>
+        <div className='border-b-2 border-gray-300 border-dashed m-[2px] bg-gray-50'>
             <div className='flex flex-row justify-between w-full p-2'>
-                <div className='flex justify-between'>
-                    <Link href={`/users/${userId}`} className='flex flex-col justify-center'>
-                        <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-                            <img src={userIconURL} alt="" />
-                        </div>
-                        <div className='ml-2 font-semibold'>{username}</div>
-                    </Link>
-                </div>
+                <Link href={`/users/${userId}`} className=''>
+                    <div className='flex justify-between'>
+                            <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full">
+                                <img src={userIconURL} alt="" />
+                            </div>
+                            <div className='ml-2 font-semibold flex flex-col justify-center' style={{ maxWidth: 'calc(100vw - 80px)' }}>
+                                <span className='line-clamp-1'>{username}</span>
+                            </div>
+                    </div>
+                </Link>
                 <div className='flex'>
                     {isPrivate ?
                         <div className='flex flex-col justify-center'>
@@ -41,36 +43,30 @@ function Post({ userId, username, userIconURL, pImageURL, pBody, pLikeCnt, pRepl
                         :
                         <></>
                     }
-                    <div className='flex flex-col justify-center text-gray-400 px-2'>{formattedTimeStamp}</div>
                     <div className='flex flex-col justify-center'>
                         <PiDotsThreeVerticalBold size={24} />
                     </div>
                 </div>
             </div>
-            <div className='w-full'>
-                <div className='w-full h-[300px] overflow-hidden flex justify-center'>
-                    <img src={pImageURL} alt='post' className='h-full w-full object-cover rounded-lg' />
-                </div>
-                <div className='whitespace-pre-line p-2'>{pBody}</div>
+            <div className='w-full h-[300px] overflow-hidden flex justify-center'>
+                <img src={pImageURL} alt='post' className='h-full w-full object-cover rounded-lg' />
             </div>
-            <div className='flex justify-around'>
-                <div className='flex justify-between gap-2 py-2'>
-                    <PiHeartBold size={24} />
-                    <div>{pLikeCnt}</div>
+            <div className='w-full flex justify-between'>
+                <div className='flex justify-start gap-3 px-2'>
+                    <div className='flex justify-between gap-2 py-2'>
+                        <PiHeartBold size={24} />
+                        <div>{pLikeCnt}</div>
+                    </div>
+                    <div className='flex justify-between gap-2 py-2'>
+                        <PiCalendarCheckBold size={24} />
+                        <div>{pDayCnt}</div>
+                    </div>
                 </div>
-                <div className='flex justify-between gap-2 py-2'>
-                    <PiChatBold size={24} />
-                    <div>{pReplyCnt}</div>
-                </div>
-                <div className='flex justify-between gap-2 py-2'>
-                    <PiBookmarkSimpleBold size={24} />
-                    <div>{pBookmarkCnt}</div>
-                </div>
-                <div className='flex justify-between gap-2 py-2'>
-                    <PiCalendarCheckBold size={24} />
-                    <div>{pDayCnt}</div>
+                <div className='text-xs flex flex-col justify-start text-gray-400 px-2'>
+                    {formattedTimeStamp}
                 </div>
             </div>
+            <div className='whitespace-pre-line pb-2 px-2'>{pBody}</div>
         </div>
     )
 }

@@ -13,7 +13,7 @@ function create() {
     const [body, setBody] = useState('');
     const { createPost } = useFirestore();
     const { showImage, deleteImage } = useStorage();
-    const [postId, setPostId] = useState('postId');
+    const [postId, setPostId] = useState('');
     const [isPrivate, setIsPrivate] = useState(true);
     const [isFileUploaded, setIsFileUploaded] = useState(false);
     const [userId, setUserId] = useState('');
@@ -39,7 +39,7 @@ function create() {
 
     const sendPost = async () => {
         const imageURL = await showImage(postId);
-        await createPost(username, postId, userId, body, null, imageURL, isPrivate); // postId, userId, pBody, pCommentTo, pImageURL
+        await createPost(username, postId, userId, body, imageURL, isPrivate); // postId, userId, pBody, pCommentTo, pImageURL
         console.log('投稿しました', imageURL);
         router.push('/home');
     };
@@ -50,7 +50,7 @@ function create() {
     }
 
     return (
-        <MainContainer>
+        <MainContainer active='create'>
             <div className='flex justify-between'>
                 <button type='button' onClick={() => reversePost()} className='p-2'>
                     <PiArrowLeftBold size={24} />
@@ -70,7 +70,7 @@ function create() {
 
                 <div className="flex justify-end mb-4">
                     <input id="default-checkbox" type="checkbox" checked={isPrivate} onChange={(e) => setIsPrivate(e.target.checked)} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" />
-                    <label htmlFor="default-checkbox" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">プライベートに設定する</label>
+                    <label htmlFor="default-checkbox" className="ml-2 text-sm font-medium text-gray-900">プライベートに設定する</label>
                 </div>
 
                 <textarea id="message" placeholder="掃除をしよう！" value={body} onChange={(e) => handleInputChange(e.target.value)} rows="4" className="grow block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none overflow-auto"></textarea>
