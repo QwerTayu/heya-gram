@@ -107,7 +107,7 @@ function username() {
                         お掃除の習慣を身につけたい現役JKです🥺💕 お掃除頑張ります😘 よろしくお願いします🙏
                     </p>
                     
-                    <div className="m-4 border-b border-gray-200 dark:border-gray-700">
+                    <div className="m-4 border-b border-gray-200">
                         <ul className="flex -mb-px text-sm font-medium text-center">
                             <li className="w-[50%] mr-2">
                                 {isTabPost ? (
