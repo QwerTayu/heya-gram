@@ -10,8 +10,11 @@ import { useRecoilValue } from 'recoil'
 function username() {
     const currentUser = useRecoilValue(currentUserState)
     const [profileUser, setProfileUser] = useState(null);
-    const { getProfileUserById, showPosts } = useFirestore();
+    const { getProfileUserById, showPosts, addFollowing, removeFollowing, getFollowing, getFollower} = useFirestore();
     const [posts, setPosts] = useState([]);
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [ followingCnt, setFollowingCnt ] = useState(0);
+    const [ followerCnt, setFollowerCnt ] = useState(0);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -20,6 +23,34 @@ function username() {
         };
         fetchData();
     }, []);
+
+    useEffect(() => {
+        if (currentUser) {
+            const checkFollowerCnt = async () => {
+                const followerArray = await getFollower(routerUserId);
+                setFollowerCnt(followerArray.length);
+            };
+            const checkFollowingCnt = async () => {
+                const followingArray = await getFollowing(routerUserId);
+                setFollowingCnt(followingArray.length);
+            }
+            checkFollowingCnt();
+            checkFollowerCnt();
+        }
+    }, [currentUser, isFollowing]);
+
+    useEffect(() => {
+        if (currentUser && profileUser) {
+            
+            const checkFollowing = async () => {
+                const followingArray = await getFollowing(currentUser.uid);
+                setIsFollowing(!followingArray.includes(routerUserId));
+            };
+            checkFollowing();
+        }
+    }, [currentUser, profileUser]);
+
+    console.log("Follow:", followingCnt, ", Follower:", followerCnt);
 
     const router = useRouter();
     const routerUserId = router.query.username;
@@ -33,6 +64,18 @@ function username() {
             }
         }
     }, [router, currentUser])
+
+
+    const handleFollow = async () => {
+        if (isFollowing) {
+            await removeFollowing(currentUser.uid, routerUserId);
+        } else {
+            await addFollowing(currentUser.uid, routerUserId);
+        }
+
+        // フォロー状態をトグル
+        setIsFollowing(!isFollowing);
+    };
 
     return (
         <MainContainer>
@@ -53,28 +96,20 @@ function username() {
                                         ログアウトする
                                     </button>
                                 ) : (
-                                    <>
-                                        {true ? (
-                                            <button className='px-5 py-1 text-white bg-cyan-400 rounded-full hover:bg-cyan-500 transition duration-300 ease-in-out'>
-                                                フォローする
-                                            </button>
-                                        ) : (
-                                            <button className='w-full px-5 py-1 text-white bg-cyan-400 rounded-full hover:bg-cyan-500 transition duration-300 ease-in-out'>
-                                                フォロー解除
-                                            </button>
-                                        )}
-                                    </>
+                                    <button onClick={handleFollow} className='px-5 py-1 text-white bg-cyan-400 rounded-full hover:bg-cyan-500 transition duration-300 ease-in-out'>
+                                        {isFollowing ? 'フォロー解除' : 'フォローする'}
+                                    </button>
                                 )}
                             </div>
                         </div>
                         <div className='flex gap-3'>
                             <div className='pt-3'>
                                 <span className='pr-2 text-sm'>フォロー</span>
-                                <span className='font-semibold text-base'>1000</span>
+                                <span className='font-semibold text-base'>{followingCnt}</span>
                             </div>
                             <div className='pt-3'>
                                 <span className='pr-2 text-sm'>フォロワー</span>
-                                <span className='font-semibold text-base'>1000</span>
+                                <span className='font-semibold text-base'>{followerCnt}</span>
                             </div>
                         </div>
                     </div>
