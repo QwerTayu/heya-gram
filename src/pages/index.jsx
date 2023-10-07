@@ -16,7 +16,7 @@ export default function Home() {
           <div className="self-stretch text-white text-base font-normal font-['Inter'] leading-normal">お部屋の掃除をしたいけど、なかなか始められない。<br />でも友達が遊びに来るときは掃除を始められる。<br />この現象を使って色んなことを共有したいZ世代向けにお掃除を促すSNSアプリができました。</div>
         </div>
         <div className="w-[450px] px-[50px] py-[100px] bg-white bg-opacity-25 rounded-[40px] flex-col justify-center items-center gap-[30px] inline-flex">
-          <Image src="/heyagram.svg" height={75} width={200} />
+          <Image alt="logo" src="/heyagram.svg" height={75} width={200} />
           <div className="flex-col justify-center items-center gap-5 flex">
             <div className="px-10 py-2.5 bg-white rounded-[100px] justify-center items-center gap-2.5 inline-flex">
               <button className="text-black text-base font-normal font-['Inter'] leading-normal"

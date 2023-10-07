@@ -1,8 +1,10 @@
 import MainContainer from '@/components/mainContainer'
+import Modal from '@/components/modal'
 import Post from '@/components/post'
 import { useFirestore } from '@/hooks/useFirestore'
 import { currentUserState } from '@/states/currentUserState'
 import { signOut } from 'next-auth/react'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useRecoilValue } from 'recoil'
@@ -10,10 +12,17 @@ import { useRecoilValue } from 'recoil'
 function username() {
     const currentUser = useRecoilValue(currentUserState)
     const [profileUser, setProfileUser] = useState(null);
-    const { getProfileUserById, showPosts, getAllUsers } = useFirestore();
+    const { getProfileUserById, showPosts, getAllUsers, addFollowing, removeFollowing, getFollowing, getFollower } = useFirestore();
     const [posts, setPosts] = useState([]);
     const [ users, setUsers ] = useState([]);
     const [ isTabPost, setIsTabPost ] = useState(true);
+    const [ isFollowing, setIsFollowing ] = useState(false);
+    const [ followingCnt, setFollowingCnt ] = useState(0);
+    const [ followerCnt, setFollowerCnt ] = useState(0);
+    const [ isFollowingModalOpen, setIsFollowingModalOpen ] = useState(false);
+    const [ isFollowerModalOpen, setIsFollowerModalOpen ] = useState(false);
+    const router = useRouter();
+    const routerUserId = router.query.username;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -25,8 +34,29 @@ function username() {
         fetchData();
     }, []);
 
-    const router = useRouter();
-    const routerUserId = router.query.username;
+    useEffect(() => {
+        if (currentUser && profileUser) {
+            const checkFF = async () => {
+                const followerArray = await getFollower(profileUser.uid);
+                setFollowerCnt(followerArray.length);
+                const followingArray = await getFollowing(profileUser.uid);
+                setFollowingCnt(followingArray.length);
+            };
+            checkFF();
+        }
+    }, [ isFollowing, profileUser]);
+
+    useEffect(() => {
+        if (profileUser) {
+            const checkFollower = async () => {
+                const followerArray = await getFollower(profileUser.uid);
+                const followerIds = followerArray.map(item => item.userId);
+                const isCurrentUserFollowing = followerIds.includes(currentUser.uid);
+                setIsFollowing(isCurrentUserFollowing);
+            };
+            checkFollower();
+        }
+    }, [profileUser]);
 
     useMemo(async () => {
         if (router.isReady && currentUser) {
@@ -35,8 +65,21 @@ function username() {
                 const user = await getProfileUserById(routerUserId);
                 setProfileUser(user)
             }
+            console.log("changed");
         }
     }, [router, currentUser])
+
+
+    const handleFollow = async () => {
+        if (isFollowing) {
+            await removeFollowing(currentUser.uid, profileUser.uid);
+        } else {
+            await addFollowing(currentUser.uid, profileUser.uid);
+        }
+
+        // フォロー状態をトグル
+        setIsFollowing(!isFollowing);
+    };
 
     return (
         <MainContainer active={profileUser ? profileUser.uid : 'user'}>
@@ -57,30 +100,28 @@ function username() {
                                         ログアウトする
                                     </button>
                                 ) : (
-                                    <>
-                                        {true ? (
-                                            <button className='px-5 py-1 text-white bg-cyan-400 rounded-full hover:bg-cyan-500 transition duration-300 ease-in-out'>
-                                                フォローする
-                                            </button>
-                                        ) : (
-                                            <button className='w-full px-5 py-1 text-white bg-cyan-400 rounded-full hover:bg-cyan-500 transition duration-300 ease-in-out'>
-                                                フォロー解除
-                                            </button>
-                                        )}
-                                    </>
+                                    <button onClick={handleFollow} className='px-5 py-1 text-white bg-cyan-400 rounded-full hover:bg-cyan-500 transition duration-300 ease-in-out'>
+                                        {isFollowing ? 'フォロー解除' : 'フォローする'}
+                                    </button>
                                 )}
                             </div>
                         </div>
                         <div className='flex gap-3'>
-                            <div className='pt-3'>
+                            <div className='pt-3' onClick={() => setIsFollowingModalOpen(true)}>
                                 <span className='pr-2 text-sm'>フォロー</span>
-                                <span className='font-semibold text-base'>1000</span>
+                                <span className='font-semibold text-base'>{followingCnt}</span>
                             </div>
-                            <div className='pt-3'>
+                            <div className='pt-3' onClick={() => setIsFollowerModalOpen(true)}>
                                 <span className='pr-2 text-sm'>フォロワー</span>
-                                <span className='font-semibold text-base'>1000</span>
+                                <span className='font-semibold text-base'>{followerCnt}</span>
                             </div>
                         </div>
+                        <Modal open={isFollowingModalOpen} onClose={() => setIsFollowingModalOpen(false)}> {/* Following */}
+                            
+                        </Modal>
+                        <Modal open={isFollowerModalOpen} onClose={() => setIsFollowerModalOpen(false)}> {/* Follower */}
+                            
+                        </Modal>
                     </div>
                     <div className='flex gap-2 py-3 w-full px-2 overflow-x-auto'>
                         <div className='w-[50%] px-5 py-2 bg-slate-100 rounded-3xl'>
@@ -98,7 +139,7 @@ function username() {
                             </h2>
                             <div className='flex flex-col gap-2 items-center justify-center'>
                                 <span className='text-4xl'>💕</span>
-                                <span className='text-md font-bold'>3 Day</span>
+                                <span className='text-md font-bold'>3 Link</span>
                             </div>
 
                         </div>
