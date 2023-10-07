@@ -17,6 +17,8 @@ function username() {
     const [ isFollowing, setIsFollowing ] = useState(false);
     const [ followingCnt, setFollowingCnt ] = useState(0);
     const [ followerCnt, setFollowerCnt ] = useState(0);
+    const router = useRouter();
+    const routerUserId = router.query.username;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -41,7 +43,7 @@ function username() {
             checkFollowingCnt();
             checkFollowerCnt();
         }
-    }, [currentUser, isFollowing]);
+    }, [currentUser, isFollowing, router]);
 
     useEffect(() => {
         if (currentUser && profileUser) {
@@ -56,8 +58,6 @@ function username() {
 
     console.log("Follow:", followingCnt, ", Follower:", followerCnt);
 
-    const router = useRouter();
-    const routerUserId = router.query.username;
 
     useMemo(async () => {
         if (router.isReady && currentUser) {
