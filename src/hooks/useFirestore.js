@@ -65,11 +65,6 @@ export const useFirestore = () => {
     const updateLikes = async (currentUserId, postId, LikedArr, setLikedArr, isLiked, setIsLiked, likeCounts, setLikeCounts) => {
         const postRef = doc(db, "posts", postId);
 
-        // console.log(`currentUserId: ${currentUserId}`)
-        // console.log(`postId: ${postId}`)
-        // console.log(`isLiked: ${isLiked}`)
-        // console.log(`likeCounts: ${likeCounts}`)
-
         if (isLiked) {
             setIsLiked(false) // いいねを取り消したユーザーの状態を更新
             setLikeCounts(likeCounts - 1) // いいね数を更新
@@ -84,7 +79,6 @@ export const useFirestore = () => {
             await updateDoc(postRef, {
                 liked: [...LikedArr, currentUserId],
             }) // 投稿にいいねしたユーザーを追加
-            console.log([...LikedArr, currentUserId])
         }
     }
 

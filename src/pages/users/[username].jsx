@@ -61,9 +61,6 @@ function username() {
         fetchData();
     }, [isFollowingModalOpen, isFollowerModalOpen, profileUser]); 
 
-    console.log("Fer", followerList);
-    console.log("Fing", followingList);
-
     useEffect(() => {
         if (currentUser && profileUser) {
             const checkFF = async () => {
@@ -97,7 +94,6 @@ function username() {
                 const user = await getProfileUserById(routerUserId);
                 setProfileUser(user)
             }
-            console.log("changed");
         }
     }, [router, currentUser])
 

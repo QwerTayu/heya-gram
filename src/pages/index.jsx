@@ -6,7 +6,6 @@ import Image from "next/image";
 
 export default function Home() {
   const { data: session } = useSession()
-  session && console.log(session.user)
 
   return (
     <div className="w-screen h-screen bg-gradient-to-br from-rose-500 to-cyan-500 flex items-center">
