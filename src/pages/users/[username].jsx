@@ -167,7 +167,7 @@ function username() {
                             {followerList && (
                                 <div className='mt-3 mx-3'>
                                     {followerList && followerList.map((user) => (
-                                        <Link key={user.uid} href={`/users/${user.uid}`} className='flex items-center gap-3 mb-3' onClick={() => setIsFollowingModalOpen(false)} >
+                                        <Link key={user.uid} href={`/users/${user.uid}`} className='flex items-center gap-3 mb-3' onClick={() => setIsFollowerModalOpen(false)} >
                                             <img src={user.image} alt={user.name} width={50} height={50} className='rounded-full' />
                                             <div className='flex flex-col justify-space'>
                                                 <p className='text-md'>{user.name}</p>
