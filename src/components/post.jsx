@@ -1,6 +1,9 @@
+import { useFirestore } from '@/hooks/useFirestore';
+import { currentUserState } from '@/states/currentUserState';
 import Link from 'next/link';
-import React from 'react'
-import { PiBookmarkSimpleBold, PiCalendarCheckBold, PiChatBold, PiDotsThreeVerticalBold, PiHeartBold, PiLockSimpleFill } from 'react-icons/pi';
+import { useMemo, useState } from 'react'
+import { PiBookmarkSimpleBold, PiCalendarCheckBold, PiChatBold, PiDotsThreeVerticalBold, PiHeartBold, PiHeartFill, PiLockSimpleFill } from 'react-icons/pi';
+import { useRecoilValue } from 'recoil';
 
 function formatTimeStamp(timeStamp) {
     if (!timeStamp) {
@@ -19,8 +22,29 @@ function formatTimeStamp(timeStamp) {
     return `${year}/${month}/${day} ${hours}:${minutes}`;
 }
 
-function Post({ userId, username, userIconURL, pImageURL, pBody, pLikeCnt, pDayCnt, timeStamp, isPrivate }) {
+function Post({ postId, userId, username, userIconURL, pImageURL, pBody, postLikedData, pDayCnt, timeStamp, isPrivate }) {
     const formattedTimeStamp = formatTimeStamp(timeStamp);
+
+    const currentUser = useRecoilValue(currentUserState);
+    const { updateLikes } = useFirestore();
+    const [isLiked, setIsLiked] = useState(false);
+    const [currentLikesData, setCurrentLikesData] = useState([]);
+    const [likeCounts, setLikeCounts] = useState(0);
+    const [isFetched, setIsFetched] = useState(false);
+
+    useMemo(() => {
+        if (!isFetched && currentUser && (postLikedData.length > 0)) {
+            setCurrentLikesData(postLikedData)
+            setLikeCounts(postLikedData.length); // いいねの数を初期化
+            const isLikedData = postLikedData.find((like) => like === currentUser.uid); // いいねしたユーザーの中に、現在のユーザーがいるかどうか
+            setIsLiked(isLikedData);
+            setIsFetched(true);
+        }
+    }, [postLikedData]) // 投稿にいいねがあれば、いいねの数をセットする
+
+    const handleLike = async () => {
+        currentUser && await updateLikes(currentUser.uid, postId, currentLikesData, setCurrentLikesData, isLiked, setIsLiked, likeCounts, setLikeCounts);
+    }
 
     return (
         <div className='border-b-2 border-gray-300 border-dashed m-[2px] bg-gray-50'>
@@ -53,10 +77,13 @@ function Post({ userId, username, userIconURL, pImageURL, pBody, pLikeCnt, pDayC
             </div>
             <div className='w-full flex justify-between'>
                 <div className='flex justify-start gap-3 px-2'>
-                    <div className='flex justify-between gap-2 py-2'>
-                        <PiHeartBold size={24} />
-                        <div>{pLikeCnt}</div>
-                    </div>
+                    <button
+                        className='flex justify-between gap-2 py-2'
+                        onClick={() => handleLike()}
+                    >
+                        <PiHeartFill size={24} className={isLiked ? 'fill-red-500' : 'fill-gray-200'} />
+                        <div>{likeCounts}</div>
+                    </button>
                     <div className='flex justify-between gap-2 py-2'>
                         <PiCalendarCheckBold size={24} />
                         <div>{pDayCnt}</div>

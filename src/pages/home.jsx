@@ -27,12 +27,13 @@ function home() {
             .map((post) => (
                 <div key={post.postId} className=''>
                     <Post
+                        postId={post.postId}
                         userId={post.userId}
                         username={post.username}
                         userIconURL={users.find((user) => user.uid === post.userId)?.image}
                         pImageURL={post.imageURL}
                         pBody={post.body}
-                        pLikeCnt={post.like_cnt}
+                        postLikedData={post.liked ? post.liked : []}
                         pDayCnt={post.day_cnt}
                         timeStamp={post.createdAt}
                         isPrivate={post.isPrivate}
