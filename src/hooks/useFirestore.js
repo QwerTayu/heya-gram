@@ -62,7 +62,7 @@ export const useFirestore = () => {
     //     setLikeCounts(posts.length)
     // }
 
-    const updateLikes = async (currentUserId, postId, LikedArr, isLiked, setIsLiked, likeCounts, setLikeCounts) => {
+    const updateLikes = async (currentUserId, postId, LikedArr, setLikedArr, isLiked, setIsLiked, likeCounts, setLikeCounts) => {
         const postRef = doc(db, "posts", postId);
 
         // console.log(`currentUserId: ${currentUserId}`)
@@ -73,12 +73,14 @@ export const useFirestore = () => {
         if (isLiked) {
             setIsLiked(false) // いいねを取り消したユーザーの状態を更新
             setLikeCounts(likeCounts - 1) // いいね数を更新
+            setLikedArr(LikedArr.filter((liked) => liked !== currentUserId))
             await updateDoc(postRef, {
                 liked: LikedArr.filter((liked) => liked !== currentUserId),
             }) // 投稿のいいねを取り消したユーザーを削除
         } else {
             setIsLiked(true) // いいねしたユーザーの状態を更新
             setLikeCounts(likeCounts + 1) // いいね数を更新
+            setLikedArr([...LikedArr, currentUserId])
             await updateDoc(postRef, {
                 liked: [...LikedArr, currentUserId],
             }) // 投稿にいいねしたユーザーを追加

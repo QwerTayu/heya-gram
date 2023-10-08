@@ -28,20 +28,22 @@ function Post({ postId, userId, username, userIconURL, pImageURL, pBody, postLik
     const currentUser = useRecoilValue(currentUserState);
     const { updateLikes } = useFirestore();
     const [isLiked, setIsLiked] = useState(false);
+    const [currentLikesData, setCurrentLikesData] = useState([]);
     const [likeCounts, setLikeCounts] = useState(0);
     const [isFetched, setIsFetched] = useState(false);
 
     useMemo(() => {
         if (!isFetched && currentUser && (postLikedData.length > 0)) {
+            setCurrentLikesData(postLikedData)
             setLikeCounts(postLikedData.length); // いいねの数を初期化
             const isLikedData = postLikedData.find((like) => like === currentUser.uid) !== null; // いいねしたユーザーの中に、現在のユーザーがいるかどうか
             setIsLiked(isLikedData);
             setIsFetched(true);
         }
-    }, [currentUser, postLikedData]) // 投稿にいいねがあれば、いいねの数をセットする
+    }, [postLikedData]) // 投稿にいいねがあれば、いいねの数をセットする
 
     const handleLike = async () => {
-        currentUser && await updateLikes(currentUser.uid, postId, postLikedData, isLiked, setIsLiked, likeCounts, setLikeCounts);
+        currentUser && await updateLikes(currentUser.uid, postId, currentLikesData, setCurrentLikesData, isLiked, setIsLiked, likeCounts, setLikeCounts);
     }
 
     return (
