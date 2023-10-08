@@ -21,6 +21,10 @@ function username() {
     const [ followerCnt, setFollowerCnt ] = useState(0);
     const [ isFollowingModalOpen, setIsFollowingModalOpen ] = useState(false);
     const [ isFollowerModalOpen, setIsFollowerModalOpen ] = useState(false);
+    const [ followingIds, setFollowingIds ] = useState([]);
+    const [ followerIds, setFollowerIds ] = useState([]);
+    const [ followingList, setFollowingList ] = useState([]);
+    const [ followerList, setFollowerList ] = useState([]);
     const router = useRouter();
     const routerUserId = router.query.username;
 
@@ -34,13 +38,41 @@ function username() {
         fetchData();
     }, []);
 
+    // Following, Followerのリストを表示する
+    useEffect(() => {
+        const fetchData = async () => {
+            const newFollowerList = [];
+            const newFollowingList = [];
+    
+            for (const followerId of followerIds) {
+                const res = await getProfileUserById(followerId);
+                newFollowerList.push(res);
+            }
+    
+            for (const followingId of followingIds) {
+                const res = await getProfileUserById(followingId);
+                newFollowingList.push(res);
+            }
+    
+            setFollowerList(newFollowerList);
+            setFollowingList(newFollowingList);
+        };
+    
+        fetchData();
+    }, [isFollowingModalOpen, isFollowerModalOpen, profileUser]); 
+
+    console.log("Fer", followerList);
+    console.log("Fing", followingList);
+
     useEffect(() => {
         if (currentUser && profileUser) {
             const checkFF = async () => {
                 const followerArray = await getFollower(profileUser.uid);
                 setFollowerCnt(followerArray.length);
+                setFollowerIds(followerArray.map(item => item.userId));
                 const followingArray = await getFollowing(profileUser.uid);
                 setFollowingCnt(followingArray.length);
+                setFollowingIds(followingArray.map(item => item.userId));
             };
             checkFF();
         }
@@ -116,11 +148,35 @@ function username() {
                                 <span className='font-semibold text-base'>{followerCnt}</span>
                             </div>
                         </div>
-                        <Modal open={isFollowingModalOpen} onClose={() => setIsFollowingModalOpen(false)}> {/* Following */}
-                            
+                        <Modal open={isFollowingModalOpen} onClose={() => setIsFollowingModalOpen(false)} title='Following' > {/* Following */}
+                            {followingList && (
+                                <div className='mt-3 mx-3'>
+                                    {followingList && followingList.map((user) => (
+                                        <Link key={user.uid} href={`/users/${user.uid}`} className='flex items-center gap-3 mb-3' onClick={() => setIsFollowingModalOpen(false)} >
+                                            <img src={user.image} alt={user.name} width={50} height={50} className='rounded-full' />
+                                            <div className='flex flex-col justify-space'>
+                                                <p className='text-md'>{user.name}</p>
+                                                <p className='text-sm text-slate-500'>@{user.uid}</p>
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            )}
                         </Modal>
-                        <Modal open={isFollowerModalOpen} onClose={() => setIsFollowerModalOpen(false)}> {/* Follower */}
-                            
+                        <Modal open={isFollowerModalOpen} onClose={() => setIsFollowerModalOpen(false)} title='Follower' > {/* Follower */}
+                            {followerList && (
+                                <div className='mt-3 mx-3'>
+                                    {followerList && followerList.map((user) => (
+                                        <Link key={user.uid} href={`/users/${user.uid}`} className='flex items-center gap-3 mb-3' onClick={() => setIsFollowingModalOpen(false)} >
+                                            <img src={user.image} alt={user.name} width={50} height={50} className='rounded-full' />
+                                            <div className='flex flex-col justify-space'>
+                                                <p className='text-md'>{user.name}</p>
+                                                <p className='text-sm text-slate-500'>@{user.uid}</p>
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            )}
                         </Modal>
                     </div>
                     <div className='flex gap-2 py-3 w-full px-2 overflow-x-auto'>
