@@ -20,8 +20,6 @@ export default function Search() {
         setProfileUser(res)
     }
 
-    console.log(profileUser)
-
     return (
         <MainContainer active='search'>
             <div>
