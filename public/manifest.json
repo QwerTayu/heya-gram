@@ -1,12 +1,12 @@
 {
-    "name":             "HeyaGram",
-    "short_name":       "HeyaGram",
-    "description":      "this is my app",
+    "name":             "Heyagram",
+    "short_name":       "Heyagram",
+    "description":      "Heyaをシェアする。汚部屋の現状確認して一緒に掃除する。",
     "start_url":        "/",
     "display":          "standalone",
     "orientation":      "portrate-primary",
-    "background_color": "#fff",
-    "theme_color":      "#fff",
+    "background_color": "#000000",
+    "theme_color":      "#000000",
     "dir": "ltr",
     "icons": [
         {
@@ -35,28 +35,13 @@
             "type": "image/png"
         },
         {
-            "src": "/icon-144x144.png",
-            "sizes": "144x144",
+            "src": "/icon-128x128.png",
+            "sizes": "128x128",
             "type": "image/png"
         },
         {
-            "src": "/icon-152x152.png",
-            "sizes": "152x152",
-            "type": "image/png"
-        },
-        {
-            "src": "/icon-160x160.png",
-            "sizes": "160x160",
-            "type": "image/png"
-        },
-        {
-            "src": "/icon-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "/icon-196x196.png",
-            "sizes": "196x196",
+            "src": "/icon-256x256.png",
+            "sizes": "256x256",
             "type": "image/png"
         },
         {

@@ -6,7 +6,7 @@ export default function Document() {
       <Head>
         <meta name="application-name" content="HeyaGram" />
         <meta name="theme-color" content="#fff" />
-        <link rel="icon" sizes="144x144" href="/icon-144x144.png" />
+        <link rel="icon" sizes="256x256" href="/icon-256x256.png" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
       </Head>
