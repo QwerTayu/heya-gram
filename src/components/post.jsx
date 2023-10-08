@@ -36,7 +36,7 @@ function Post({ postId, userId, username, userIconURL, pImageURL, pBody, postLik
         if (!isFetched && currentUser && (postLikedData.length > 0)) {
             setCurrentLikesData(postLikedData)
             setLikeCounts(postLikedData.length); // いいねの数を初期化
-            const isLikedData = postLikedData.find((like) => like === currentUser.uid) !== null; // いいねしたユーザーの中に、現在のユーザーがいるかどうか
+            const isLikedData = postLikedData.find((like) => like === currentUser.uid); // いいねしたユーザーの中に、現在のユーザーがいるかどうか
             setIsLiked(isLikedData);
             setIsFetched(true);
         }
