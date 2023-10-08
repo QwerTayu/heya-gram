@@ -17,5 +17,15 @@
 }
 
 body {
-  background-color: white;
+  background-color:blanchedalmond;
+}
+
+.h-screen {
+  height: 100vh;
+  height: 100dvh;
+}
+
+.w-screen {
+  width: 100vw;
+  width: 100dvw;
 }
